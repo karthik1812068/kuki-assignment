@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@codepilot/config": ["../config/src/index.ts"],
+      "@codepilot/logger": ["../logger/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"]
+}

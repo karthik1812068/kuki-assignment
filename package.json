@@ -1,0 +1,46 @@
+{
+  "name": "codepilot-ai",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "description": "CodePilot AI — autonomous software engineering workspace.",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run build:packages && concurrently -n packages,api,web,agent -c cyan,blue,green,magenta \"npm run dev:packages\" \"npm run dev -w @codepilot/api\" \"npm run dev -w @codepilot/web\" \"npm run dev -w @codepilot/agent\"",
+    "dev:packages": "concurrently -n types,config,logger,security,ai,index,github,tools,database \"tsc -w -p packages/types/tsconfig.build.json --preserveWatchOutput\" \"tsc -w -p packages/config/tsconfig.build.json --preserveWatchOutput\" \"tsc -w -p packages/logger/tsconfig.build.json --preserveWatchOutput\" \"tsc -w -p packages/security/tsconfig.build.json --preserveWatchOutput\" \"tsc -w -p packages/ai/tsconfig.build.json --preserveWatchOutput\" \"tsc -w -p packages/indexing/tsconfig.build.json --preserveWatchOutput\" \"tsc -w -p packages/github/tsconfig.build.json --preserveWatchOutput\" \"tsc -w -p packages/tools/tsconfig.build.json --preserveWatchOutput\" \"tsc -w -p packages/database/tsconfig.build.json --preserveWatchOutput\"",
+    "build:packages": "npm run build -w @codepilot/types && npm run build -w @codepilot/config && npm run build -w @codepilot/logger && npm run build -w @codepilot/security && npm run build -w @codepilot/ai && npm run build -w @codepilot/indexing && npm run build -w @codepilot/github && npm run build -w @codepilot/tools && npm run build -w @codepilot/database",
+    "build": "npm run build:packages && npm run build -w @codepilot/api && npm run build -w @codepilot/agent && npm run build -w @codepilot/web",
+    "typecheck": "npm run build:packages && npm run typecheck --workspaces --if-present",
+    "lint": "npm run build:packages && eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.mts",
+    "db:migrate": "npm run db:migrate -w @codepilot/database",
+    "prepare": "husky"
+  },
+  "overrides": {
+    "typescript": "5.9.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.4",
+    "concurrently": "^10.0.5",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
+    "prettier": "^3.9.9",
+    "tsx": "^4.19.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^5.0.1"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@codepilot/agent",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@codepilot/ai": "0.0.0",
+    "@codepilot/config": "0.0.0",
+    "@codepilot/database": "0.0.0",
+    "@codepilot/indexing": "0.0.0",
+    "@codepilot/logger": "0.0.0",
+    "@codepilot/security": "0.0.0",
+    "@codepilot/tools": "0.0.0"
+  }
+}

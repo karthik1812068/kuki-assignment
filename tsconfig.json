@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@codepilot/config": ["packages/config/src/index.ts"],
+      "@codepilot/database": ["packages/database/src/index.ts"],
+      "@codepilot/github": ["packages/github/src/index.ts"],
+      "@codepilot/logger": ["packages/logger/src/index.ts"],
+      "@codepilot/security": ["packages/security/src/index.ts"],
+      "@codepilot/types": ["packages/types/src/index.ts"]
+    }
+  },
+  "include": ["vitest.config.mts", "vitest.integration.config.mts", "tests/integration/**/*.ts"]
+}

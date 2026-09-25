@@ -1,0 +1,59 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-mono: 'Cascadia Code', 'SFMono-Regular', ui-monospace, monospace;
+  --color-ink: #e7eef6;
+  --color-muted: #93a1b3;
+  --color-bg: #0b0e13;
+  --color-panel: #121820;
+  --color-panel-2: #18212c;
+  --color-line: #2a3646;
+  --color-accent: #3ecfb8;
+  --color-accent-ink: #06221e;
+  --color-warn: #e2b15a;
+  --color-danger: #ef6f78;
+  --color-ok: #79c98a;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+.home-grid {
+  background-image:
+    radial-gradient(circle at top left, rgba(62, 207, 184, 0.12), transparent 32%),
+    linear-gradient(to right, rgba(42, 54, 70, 0.45) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(42, 54, 70, 0.45) 1px, transparent 1px);
+  background-size:
+    auto,
+    56px 56px,
+    56px 56px;
+}

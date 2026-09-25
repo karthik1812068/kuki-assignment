@@ -1,0 +1,10 @@
+export { buildRepositoryIndex, IndexError } from './build';
+export type { IndexBuild, IndexedChunk, IndexedFile } from './build';
+export { chunkSource } from './chunk';
+export type { ChunkDraft, SourceFile } from './chunk';
+export { detectProject } from './detect';
+export type { IndexDetection } from './detect';
+export { INDEX_LIMITS } from './limits';
+export { rankChunks } from './rank';
+export type { RankCandidate } from './rank';
+export { extractSymbols } from './symbols';

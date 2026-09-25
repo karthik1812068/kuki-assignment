@@ -1,0 +1,22 @@
+{
+  "name": "@codepilot/indexing",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@codepilot/ai": "0.0.0",
+    "@codepilot/security": "0.0.0",
+    "@codepilot/types": "0.0.0"
+  }
+}

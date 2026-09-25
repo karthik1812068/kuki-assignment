@@ -1,0 +1,21 @@
+CREATE TABLE "repositories" (
+  "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  "owner_id" uuid NOT NULL REFERENCES "users" ("id") ON DELETE CASCADE,
+  "github_repo_id" bigint NOT NULL,
+  "name" text NOT NULL,
+  "full_name" text NOT NULL,
+  "default_branch" text NOT NULL,
+  "language" text,
+  "description" text,
+  "private" boolean NOT NULL,
+  "html_url" text NOT NULL,
+  "permission" text NOT NULL,
+  "status" text NOT NULL,
+  "clone_error" text,
+  "indexed_at" timestamptz,
+  "created_at" timestamptz NOT NULL DEFAULT now(),
+  "updated_at" timestamptz NOT NULL DEFAULT now(),
+  CONSTRAINT "repositories_owner_github_unique" UNIQUE ("owner_id", "github_repo_id"),
+  CONSTRAINT "repositories_status_check" CHECK ("status" IN ('cloning', 'cloned', 'clone_failed')),
+  CONSTRAINT "repositories_permission_check" CHECK ("permission" IN ('admin', 'maintain', 'write', 'triage', 'read'))
+);

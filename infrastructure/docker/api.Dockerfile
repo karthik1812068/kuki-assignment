@@ -49,6 +49,7 @@ COPY --from=build /app/packages/ai/dist packages/ai/dist
 COPY --from=build /app/packages/indexing/dist packages/indexing/dist
 COPY --from=build /app/packages/github/dist packages/github/dist
 COPY --from=build /app/packages/tools/dist packages/tools/dist
+COPY --from=build /app/docs/evaluation docs/evaluation
 
 RUN chown -R node:node /app
 USER node

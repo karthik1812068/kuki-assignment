@@ -1,6 +1,6 @@
 import { SESSION_COOKIE_NAME } from '@codepilot/types';
 import { cookies } from 'next/headers';
-import { publicApiUrl } from './api-url';
+import { serverApiUrl } from './api-url';
 
 export async function apiFetch(path: string, init: RequestInit = {}): Promise<Response | null> {
   const jar = await cookies();
@@ -13,7 +13,7 @@ export async function apiFetch(path: string, init: RequestInit = {}): Promise<Re
   headers.set('cookie', `${SESSION_COOKIE_NAME}=${encodeURIComponent(session)}`);
 
   try {
-    return await fetch(new URL(path, publicApiUrl()), {
+    return await fetch(new URL(path, serverApiUrl()), {
       ...init,
       headers,
       cache: 'no-store',

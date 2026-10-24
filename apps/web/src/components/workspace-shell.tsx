@@ -1,7 +1,6 @@
 import type { CurrentUser } from '@codepilot/types';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { publicApiUrl } from '@/lib/api-url';
 import { NavLinks } from './nav-links';
 
 export function WorkspaceShell({ user, children }: { user: CurrentUser; children: ReactNode }) {
@@ -31,7 +30,7 @@ export function WorkspaceShell({ user, children }: { user: CurrentUser; children
               />
             ) : null}
             <span className="text-sm text-ink md:hidden">{user.login}</span>
-            <form action={`${publicApiUrl()}/auth/logout`} method="post">
+            <form action="/auth/logout" method="post">
               <button type="submit" className="text-sm text-muted hover:text-ink">
                 Sign out
               </button>

@@ -1,6 +1,6 @@
 import { SESSION_COOKIE_NAME, type CurrentUser } from '@codepilot/types';
 import { cookies } from 'next/headers';
-import { publicApiUrl } from './api-url';
+import { serverApiUrl } from './api-url';
 import { parseCurrentUser } from './parse-current-user';
 
 export async function getCurrentUser(): Promise<CurrentUser | null> {
@@ -11,7 +11,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   }
 
   try {
-    const response = await fetch(new URL('/auth/me', publicApiUrl()), {
+    const response = await fetch(new URL('/auth/me', serverApiUrl()), {
       headers: { cookie: `${SESSION_COOKIE_NAME}=${encodeURIComponent(session)}` },
       cache: 'no-store',
     });

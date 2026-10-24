@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation';
 import { safeAppPath } from '@codepilot/types';
 import { getCurrentUser } from '@/lib/current-user';
 import { loginErrorMessage } from '@/lib/login-error';
-import { publicApiUrl } from '@/lib/api-url';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,8 +21,7 @@ export default async function LoginPage({
   const params = await searchParams;
   const error = loginErrorMessage(params.error);
   const next = safeAppPath(params.next);
-  const start = new URL('/auth/github', publicApiUrl());
-  start.searchParams.set('next', next);
+  const start = `/auth/github?next=${encodeURIComponent(next)}`;
 
   return (
     <main className="home-grid flex min-h-screen items-center justify-center px-6 py-16">
@@ -43,7 +41,7 @@ export default async function LoginPage({
           </p>
         ) : null}
         <a
-          href={start.toString()}
+          href={start}
           className="mt-6 block w-full rounded-md bg-accent px-4 py-2.5 text-center text-sm font-semibold text-accent-ink"
         >
           Continue with GitHub

@@ -88,7 +88,8 @@ export class AuthController {
     value: string,
     maxAgeSeconds: number,
   ): void {
-    const policy = cookiePolicy(this.webOrigin(), request.hostname);
+    const forwarded = request.get('x-forwarded-host')?.split(',')[0]?.trim();
+    const policy = cookiePolicy(this.webOrigin(), forwarded || request.hostname);
     response.setHeader(
       'Set-Cookie',
       sessionCookie(SESSION_COOKIE_NAME, value, {

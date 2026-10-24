@@ -1,3 +1,5 @@
+import { parseFinancialPeriod } from '@codepilot/indexing';
+
 const STOP_WORDS = new Set([
   'the',
   'and',
@@ -39,6 +41,18 @@ export function planSearchQuery(title: string, description: string): string {
   if (file) {
     return file.slice(0, 200);
   }
+  const period = parseFinancialPeriod(`${title}\n${description}`);
+  if (period) {
+    return period.query.slice(0, 200);
+  }
+  return longestTokenQuery(title, description);
+}
+
+export function baselinePlanSearchQuery(title: string, description: string): string {
+  return longestTokenQuery(title, description);
+}
+
+function longestTokenQuery(title: string, description: string): string {
   const tokens = `${title}\n${description}`.match(/[A-Za-z_][A-Za-z0-9_]{2,}/g) ?? [];
   const useful = tokens.filter((token) => !STOP_WORDS.has(token.toLowerCase()));
   const ranked = [...useful].sort((left, right) => right.length - left.length);

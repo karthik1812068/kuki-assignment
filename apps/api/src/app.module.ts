@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
 import { RepositoriesModule } from './repositories/repositories.module';
 import { TasksModule } from './tasks/tasks.module';
+import { DocumentsModule } from './documents/documents.module';
+import { EvaluationModule } from './evaluation/evaluation.module';
 import { InfrastructureModule } from './infrastructure/infrastructure.module';
 
 @Module({
@@ -24,6 +26,8 @@ import { InfrastructureModule } from './infrastructure/infrastructure.module';
     AgentModule,
     RepositoriesModule,
     TasksModule,
+    DocumentsModule,
+    EvaluationModule,
   ],
   providers: [
     RequestContextMiddleware,

@@ -7,3 +7,5 @@ Implemented contracts are documented beside this file.
 - [Repositories](repositories.md)
 - [Agent boundary](agent.md)
 - [Tasks](tasks.md)
+- [Documents](documents.md)
+- [Evaluation](evaluation.md)

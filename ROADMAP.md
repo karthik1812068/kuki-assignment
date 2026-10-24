@@ -86,4 +86,4 @@ The workflow is complete when:
 
 ## Next
 
-The product workflow is implemented. A live GitHub login, a running database, a model key, and a local Docker engine are still required before an end-to-end task can finish on this machine.
+The product workflow is implemented. Reproduce quality checks with `npm test` and [docs/evaluation/README.md](docs/evaluation/README.md). A live GitHub login, Postgres, Redis, a model key, and local Docker are still required for a full task on this machine. Terraform still defines no cloud resources.

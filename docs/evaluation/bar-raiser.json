@@ -1,0 +1,135 @@
+{
+  "command": "npm test",
+  "cases": 12,
+  "baselinePassed": 0,
+  "improvedPassed": 12,
+  "baselinePassRate": 0,
+  "improvedPassRate": 1,
+  "baselineAvg": 0.3362,
+  "improvedAvg": 1,
+  "weakness": "Baseline takes the first non-zero number it sees, so it mixes bill line items and never flags missing or conflicting values.",
+  "improvement": "The better path splits amount roles, keeps FY 2024-25 vs 2025-26 separate, checks Form 37 dates and company names, and refuses diesel/gas when they are not in the files.",
+  "unresolved": "PDF and native .xls locators are still weaker than CSV. Upload your own files on Documents if you need answers from those.",
+  "details": [
+    {
+      "id": "adani_amount_roles",
+      "question": "On the Adani electricity bill, what is the current month bill amount versus the total amount payable, and what is payable after the due date?",
+      "notes": "Current month, total payable, and after-due amounts are different roles.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.6667,
+      "improvedScore": 1,
+      "delta": 0.3333
+    },
+    {
+      "id": "bills_consumption_period",
+      "question": "What electricity consumption does each bill report, and for which period?",
+      "notes": "Each bill row keeps its own period.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.5,
+      "improvedScore": 1,
+      "delta": 0.5
+    },
+    {
+      "id": "form3_date_inconsistency",
+      "question": "Is there a date inconsistency on the hazardous waste Form 37?",
+      "notes": "Dispatch 2024-04-01 is before generation 2024-04-10.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.134,
+      "improvedScore": 1,
+      "delta": 0.866
+    },
+    {
+      "id": "fy_2024_25_electricity",
+      "question": "For Indian financial year 2024-25, what electricity consumption is evidenced and how complete is the coverage?",
+      "notes": "FY 2024-25 is the year ending 31 March 2025.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.5,
+      "improvedScore": 1,
+      "delta": 0.5
+    },
+    {
+      "id": "fy_2025_26_coverage",
+      "question": "For Indian FY 2025-26, what evidence exists and how complete is the coverage?",
+      "notes": "No FY 2025-26 electricity is on file.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.284,
+      "improvedScore": 1,
+      "delta": 0.716
+    },
+    {
+      "id": "missing_diesel",
+      "question": "What diesel fuel consumption is recorded in these documents?",
+      "notes": "Missing diesel must not borrow an electricity number.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.284,
+      "improvedScore": 1,
+      "delta": 0.716
+    },
+    {
+      "id": "org_mismatch",
+      "question": "Can we report a single company-wide electricity total from these documents?",
+      "notes": "Adani Electricity and Torrent Power are different companies.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.284,
+      "improvedScore": 1,
+      "delta": 0.716
+    },
+    {
+      "id": "policy_complaint_deadline",
+      "question": "Does the quality policy specify a deadline for resolving customer complaints?",
+      "notes": "Deadline is 30 days in the policy text.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.2,
+      "improvedScore": 1,
+      "delta": 0.8
+    },
+    {
+      "id": "water_vs_meter",
+      "question": "Does the water consumption match the meter readings for FY 2023-24?",
+      "notes": "Bill 100 kl vs meter 80 kl.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.134,
+      "improvedScore": 1,
+      "delta": 0.866
+    },
+    {
+      "id": "waste_total",
+      "question": "What total waste quantity is recorded for FY 2023-24?",
+      "notes": "12 kg + 8 kg is calculated.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.632,
+      "improvedScore": 1,
+      "delta": 0.368
+    },
+    {
+      "id": "workbook_agree",
+      "question": "Do the workbook monthly values and annual summaries agree for FY 2023-24?",
+      "notes": "10+20+30 equals 60.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.132,
+      "improvedScore": 1,
+      "delta": 0.868
+    },
+    {
+      "id": "missing_gas",
+      "question": "What gas consumption is reported for FY 2023-24?",
+      "notes": "Gas is not in these files.",
+      "baselinePass": false,
+      "improvedPass": true,
+      "baselineScore": 0.284,
+      "improvedScore": 1,
+      "delta": 0.716
+    }
+  ]
+}

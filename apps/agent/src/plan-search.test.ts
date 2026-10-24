@@ -13,4 +13,10 @@ describe('planSearchQuery', () => {
   it('searches a named file before a longer word', () => {
     expect(planSearchQuery('add a note', 'Add one sentence to README.md.')).toBe('README.md');
   });
+
+  it('searches FY2024 when the task names a financial year', () => {
+    expect(planSearchQuery('Compare years', 'Use financial year 2024 not calendar 2023')).toBe(
+      'FY2024',
+    );
+  });
 });

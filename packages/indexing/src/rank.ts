@@ -1,5 +1,6 @@
 import { tokenize } from '@codepilot/ai';
 import type { CodeSearchHit } from '@codepilot/types';
+import { periodMatchScore } from './periods';
 import { isSafeRelativePath } from './safe-path';
 
 export interface RankCandidate {
@@ -23,12 +24,14 @@ export function rankChunks(query: string, candidates: readonly RankCandidate[]):
       const semanticScore = unit(candidate.cosine);
       const keywordScore = keyword(tokens, candidate.content);
       const symbolScore = symbolMatch(query, candidate.symbol);
+      const periodScore = periodMatchScore(query, candidate.content);
       return {
         candidate,
         semanticScore,
         keywordScore,
         symbolScore,
-        rank: 0.5 * semanticScore + 0.35 * keywordScore + 0.15 * symbolScore,
+        periodScore,
+        rank: 0.4 * semanticScore + 0.28 * keywordScore + 0.12 * symbolScore + 0.2 * periodScore,
       };
     });
 

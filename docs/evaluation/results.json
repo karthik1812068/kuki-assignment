@@ -1,0 +1,9 @@
+{
+  "command": "npm test",
+  "cases": 6,
+  "baselinePassed": 2,
+  "improvedPassed": 6,
+  "baselineScore": 0.333,
+  "improvedScore": 1,
+  "notes": "Measured by apps/agent/src/evaluation.ts. Baseline is longest-token search plus keyword ranking. Improved uses named files, FY year-ending labels, and period-aware ranking."
+}

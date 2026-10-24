@@ -233,6 +233,7 @@ async function draft(
       'Reply with JSON only. Use keys steps and edits.',
       'edits items use path, type, content or oldText and newText, and reason.',
       'type must be create, write, edit, or delete. Use edit with oldText and newText to change existing text.',
+      'If the task names a financial year (FY2024, FY 2023-24), keep that period. Do not replace it with a calendar year.',
       `Mode: ${task.mode}.`,
       `Title: ${task.title}`,
       task.description,

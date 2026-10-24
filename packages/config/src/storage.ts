@@ -11,3 +11,10 @@ export function repositoryStorageDir(
   }
   return path.join(findRepoRoot(start), 'data', 'repositories');
 }
+
+export function documentStorageDir(
+  env: Pick<FoundationEnv, 'REPOSITORIES_DIR'>,
+  start = process.cwd(),
+): string {
+  return path.join(path.dirname(repositoryStorageDir(env, start)), 'documents');
+}

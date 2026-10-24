@@ -4,6 +4,8 @@ import { safeAppPath, SESSION_COOKIE_NAME } from './index';
 describe('safeAppPath', () => {
   it('allows workspace paths and drops everything else', () => {
     expect(safeAppPath('/tasks/123')).toBe('/tasks/123');
+    expect(safeAppPath('/documents')).toBe('/documents');
+    expect(safeAppPath('/evaluation')).toBe('/evaluation');
     expect(safeAppPath('/settings')).toBe('/settings');
     expect(safeAppPath('https://evil.example/tasks')).toBe('/dashboard');
     expect(safeAppPath('//evil.example')).toBe('/dashboard');

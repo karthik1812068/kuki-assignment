@@ -1,18 +1,14 @@
 # CodePilot AI
 
-Engineering workspace for understanding a repository, planning a change, and reviewing the result. This build can sign in with GitHub, clone a repository, index it, and run an approval-gated task. Edits, sandbox commands, and pull requests wait for approval. A model call happens only when `LLM_API_KEY` and `LLM_MODEL` are both set.
+GitHub-backed workspace: clone a repo, index it on the machine, then run a task. Edits, sandbox commands, and PRs wait for approval. LLM calls only happen if `LLM_API_KEY` and `LLM_MODEL` are set.
 
-## Phase
+## What you need
 
-Phases 0 through 13 are implemented. A task still needs Postgres, Redis, a cloned repository, and, for publish, GitHub credentials. The sandbox needs Docker on the worker machine.
-
-## Prerequisites
-
-- Node.js 22
+- Node 22
 - npm 10
-- Docker, for Postgres and Redis
+- Docker (Postgres + Redis, and the command sandbox)
 
-## Local setup
+## Setup
 
 ```bash
 npm install
@@ -22,24 +18,23 @@ npm run dev
 ```
 
 - Web: http://localhost:3000
-- API liveness: http://localhost:4000/health
-- API readiness: http://localhost:4000/ready
+- API: http://localhost:4000/health (readiness is `/ready`)
 
-Copy `.env.example` to `.env` if you do not already have one. The sample database password is for local Docker only. Values already set in the shell take precedence over `.env`.
+Copy `.env.example` to `.env` if you don't have one yet. Vars already in the shell override the file. The sample DB password is only for local compose.
 
-GitHub sign-in also needs `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_CALLBACK_URL`, and `ENCRYPTION_KEY` (at least 32 characters). The callback URL is the API route `http://localhost:4000/auth/github/callback`. Without those values the API still starts, and the sign-in button explains that OAuth is not configured.
+GitHub login also needs `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_CALLBACK_URL`, and `ENCRYPTION_KEY` (32+ chars). Callback URL is `http://localhost:4000/auth/github/callback`. Without those the API still starts; the login button just says OAuth isn't set up.
 
-If port 5432 or 6379 is already in use, choose other host ports and point the URLs at them:
+If 5432 or 6379 is taken:
 
 ```bash
 POSTGRES_PORT=55432 REDIS_PORT=6380 docker compose up postgres redis -d
 ```
 
-Then set `DATABASE_URL` and `REDIS_URL` to those host ports before `npm run db:migrate` and `npm run dev`.
+Point `DATABASE_URL` and `REDIS_URL` at those host ports, then migrate and `npm run dev` again.
 
-`npm run dev` builds the shared packages, then starts the API, web app, and agent worker. The worker waits on the index queue after it can reach Postgres and Redis. It does not call a model.
+`npm run dev` builds the shared packages and starts web, API, and the worker. The worker watches Redis. Indexing does not call a model.
 
-The full container stack, including the apps, is:
+Full stack in containers:
 
 ```bash
 docker compose up --build
@@ -47,36 +42,37 @@ docker compose up --build
 
 ## Scripts
 
-| Command                    | Purpose                                           |
-| -------------------------- | ------------------------------------------------- |
-| `npm run dev`              | Build packages and start web, API, and the worker |
-| `npm run build`            | Production build                                  |
-| `npm run typecheck`        | Build packages, then typecheck every workspace    |
-| `npm run lint`             | Lint packages, API, worker, and web               |
-| `npm test`                 | Unit tests. Docker is not required                |
-| `npm run test:integration` | Postgres migration, Postgres ping, and Redis ping |
-| `npm run db:migrate`       | Apply SQL migrations                              |
-| `npm run format`           | Format the repository                             |
+- `npm run dev` — packages + web + API + worker
+- `npm run build`
+- `npm run typecheck`
+- `npm run lint`
+- `npm test` — unit tests, including the document eval suite (no Docker)
+- `npm run test:integration` — Postgres + Redis pings
+- `npm run db:migrate`
+- `npm run format`
 
 ## Layout
 
 ```text
-apps/web        Next.js workspace shell
-apps/api        NestJS HTTP API
-apps/agent      Index and task worker. Edits run in a workspace, and commands run in Docker.
-packages/*      Shared TypeScript packages
-infrastructure  Dockerfiles and placeholders for later AWS work
+apps/web          Next.js app
+apps/api          NestJS API
+apps/agent        worker (index + tasks)
+packages/indexing clone search, plus document extract / Q&A under src/docs
+packages/*        other shared libs
+docs/             API notes and eval fixtures (see docs/INDEX.md)
+infrastructure    Docker / later AWS bits
 ```
 
-## What still depends on the machine
+## Notes
 
-- GitHub OAuth credentials and a reachable Postgres and Redis
-- A model key, if a task should propose edits instead of a search-only plan
-- Docker, if sandbox tests should run
-- Applying Terraform, which currently defines no cloud resources
+Indexing is local. `POST /repositories/:id/index` just queues a job. The worker walks the clone, skips secrets and build output, and stores hashed vectors. Search does not send repo text to a hosted embedding model.
 
-Indexing is local. `POST /repositories/:id/index` queues work. The worker scans the clone, skips secrets and generated files, and stores hashed vectors. Search does not send repository text to a model.
+`GET /agent` says whether an LLM client can be created. Nothing in the index path uses it.
 
-A model completion is possible only after `LLM_API_KEY` and `LLM_MODEL` are set, and only when a later phase calls the client. This phase does not call it. `GET /agent` reports whether that client can be created.
+**Documents:** after sign-in you can upload pdf / xlsx / csv / txt. Each file is its own job (queued → processing → completed / failed / duplicate). Status sits in Postgres so a restart doesn't wipe it. If the worker dies mid-job, that payload goes back on the wait list next start. Three thrown failures and it lands on the dead list instead of looping.
 
-Product requirements live in [PRD.md](PRD.md). The current shape of the system is in [ARCHITECTURE.md](ARCHITECTURE.md). The phase list is in [ROADMAP.md](ROADMAP.md).
+Indian FY labels: `FY 2023-24` and `financial year 2024` both mean FY2024 (year ending 31 Mar 2024).
+
+**Evaluation:** `/evaluation` in the app, or `npm test`. Cases are in `packages/indexing/src/docs/cases.ts`, fixtures in `docs/evaluation/fixtures`. More notes in [docs/evaluation/README.md](docs/evaluation/README.md).
+
+Longer writeups: [PRD.md](PRD.md), [ARCHITECTURE.md](ARCHITECTURE.md), [ROADMAP.md](ROADMAP.md).

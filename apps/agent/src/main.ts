@@ -1,11 +1,12 @@
 import { llmProviderFromEnv, LlmRequestError } from '@codepilot/ai';
-import { loadFoundationEnv, repositoryStorageDir } from '@codepilot/config';
+import { documentStorageDir, loadFoundationEnv, repositoryStorageDir } from '@codepilot/config';
 import {
   closeRedis,
   createBlockingRedisClient,
   createPostgresPool,
   createRedisClient,
   PgAuthRepository,
+  PgDocumentStore,
   PgIndexStore,
   PgRepositoryStore,
   PgTaskStore,
@@ -26,6 +27,7 @@ async function main(): Promise<void> {
   const repositories = new PgRepositoryStore(pool);
   const indexes = new PgIndexStore(pool);
   const tasks = new PgTaskStore(pool);
+  const documents = new PgDocumentStore(pool);
   const auth = new PgAuthRepository(pool);
   const provider = llmProviderFromEnv({
     apiKey: env.LLM_API_KEY,
@@ -130,10 +132,18 @@ async function main(): Promise<void> {
     outputUsdPerMillion: env.LLM_OUTPUT_USD_PER_MILLION,
   };
   await consumeWorkQueue({
+    redis,
     queue,
     stopping: () => shuttingDown,
     logger,
     storageDir: repositoryStorageDir(env),
+    documentDir: documentStorageDir(env),
+    documentStore: {
+      claim: (id, ownerId) => documents.claim(id, ownerId),
+      complete: (id, ownerId, extraction, kind) =>
+        documents.complete(id, ownerId, extraction, kind),
+      fail: (id, ownerId, message) => documents.fail(id, ownerId, message),
+    },
     indexStore: {
       findForOwner: (id, ownerId) => repositories.findForOwner(id, ownerId),
       markIndexingRunning: (id, ownerId) => repositories.markIndexingRunning(id, ownerId),

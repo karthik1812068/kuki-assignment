@@ -49,7 +49,14 @@ export interface CurrentUser {
   scopes: string[];
 }
 
-const APP_PATHS = ['/dashboard', '/repositories', '/tasks', '/settings'] as const;
+const APP_PATHS = [
+  '/dashboard',
+  '/documents',
+  '/evaluation',
+  '/repositories',
+  '/tasks',
+  '/settings',
+] as const;
 
 /** Keep post-login redirects inside the workspace. */
 export const REPOSITORY_PERMISSIONS = ['admin', 'maintain', 'write', 'triage', 'read'] as const;

@@ -21,13 +21,19 @@
     "COMPLETED",
     "FAILED",
     "CANCELLED"
-  ]
+  ],
+  "work": {
+    "index": { "waiting": 0, "processing": 0, "dead": 0 },
+    "task": { "waiting": 0, "processing": 0, "dead": 0 },
+    "workerSeenAt": null,
+    "workerLive": false
+  }
 }
 ```
 
 `provider` is `openai-compatible` only when both `LLM_API_KEY` and `LLM_MODEL` are set. Otherwise both `provider` and `model` are null.
 
-`toolExecution` is true when handlers are installed. Read tools do not require approval. Write, execute, git, and GitHub tools do, and they run in the worker.
+`work` is Redis queue depth plus the worker heartbeat. `workerLive` is true only when the worker wrote that key in the last 45 seconds. Missing Redis data is returned as zeros, not as a 500. The API key is still omitted.
 
 Completions, when configured, go to `LLM_BASE_URL` or `https://api.openai.com/v1`. The client does not follow redirects. Token counts come from the provider response. A missing usage field is rejected rather than filled in.
 

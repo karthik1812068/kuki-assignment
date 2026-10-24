@@ -20,6 +20,7 @@ import {
   type ReviewFinding,
 } from '@codepilot/tools';
 import { resolveWithinRoot } from '@codepilot/security';
+import { parseFinancialPeriod } from '@codepilot/indexing';
 import { planSearchQuery, mentionedPaths } from './plan-search';
 import { runArgv, processPathEnv } from './run-argv';
 import { runTaskPhase, type TaskMode, type TaskSnapshot } from './task-run';
@@ -311,7 +312,11 @@ async function inspectRepository(
       named.push(`${file}\n${read.text}`);
     }
   }
-  const excerpts = [issue, ...named, search.text, structure.text]
+  const period = parseFinancialPeriod(`${task.title}\n${task.description}`);
+  const periodNote = period
+    ? `Requested period: ${period.label} (${period.kind}, ${period.startYear}-${period.endYear}). Do not substitute a different year.`
+    : '';
+  const excerpts = [issue, periodNote, ...named, search.text, structure.text]
     .filter(Boolean)
     .join('\n')
     .slice(0, 8_000);

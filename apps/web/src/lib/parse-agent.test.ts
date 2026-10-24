@@ -14,6 +14,7 @@ describe('parseAgentStatus', () => {
     });
     expect(status?.provider).toBeNull();
     expect(status?.toolExecution).toBe(false);
+    expect(status?.work).toBeNull();
     expect(status).not.toHaveProperty('apiKey');
     expect(JSON.stringify(status)).not.toContain('sk-secret-value');
   });

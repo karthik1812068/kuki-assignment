@@ -30,7 +30,7 @@ The worker does not call a language model while indexing. Embeddings stay the lo
 | `@codepilot/database` | Postgres pool, Redis client, SQL migrations                              |
 | `@codepilot/security` | Redaction, token encryption, path confinement, repository ignore rules   |
 | `@codepilot/ai`       | Provider interface, still empty, plus the local hash embedding           |
-| `@codepilot/indexing` | Scan, ignore, symbol chunking, detection, and search ranking             |
+| `@codepilot/indexing` | Repo scan + rank; also document extract / Q&A (`src/docs`)               |
 | `@codepilot/github`   | OAuth, profile reads, and repository listing. Clone arguments stay fixed |
 | `@codepilot/tools`    | Planned tool catalog. `implemented` is false                             |
 
@@ -51,7 +51,7 @@ Drizzle's migrator applies `packages/database/migrations`. Auth adds `users`, `g
 
 ## Web
 
-The home page and `/login` are public. Dashboard, repositories, tasks, and settings require a session. Those pages still describe missing product data. They do not invent usage, success, or cost figures. Infrastructure latency on the dashboard comes from `/ready`. Settings lists the OAuth scopes stored for the signed-in user.
+The home page and `/login` are public. Dashboard, repositories, tasks, documents, evaluation, and settings need a session. Dashboard numbers come from Postgres / Redis. The eval percentages are the fixture run from `npm test`. Cost stays blank until token prices are set. Settings lists the OAuth scopes we stored for the user.
 
 ## Security boundary
 

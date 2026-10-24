@@ -20,7 +20,7 @@ COPY . .
 ARG NEXT_PUBLIC_API_URL=http://localhost:4000
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build -w @codepilot/web
+RUN npm run build -w @codepilot/types && npm run build -w @codepilot/web
 
 FROM node:22-alpine AS runtime
 WORKDIR /app
